@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Build Fabric Mod (Java 21)
 
 on:
   push:
@@ -8,41 +8,29 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Set up JDK 21
+    - name: Set up JDK 21 (Eclipse Temurin)
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Setup Gradle
+    - name: Make gradlew executable
+      run: chmod +x gradlew
+
+    - name: Setup Gradle caching
       uses: gradle/actions/setup-gradle@v4
 
-    - name: Build with Gradle Wrapper
+    - name: Build with Gradle
       run: ./gradlew build
 
-
-  dependency-submission:
-
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
+    - name: Upload built mod JAR
+      uses: actions/upload-artifact@v4
       with:
-        java-version: '21'
-        distribution: 'temurin'
-
-    - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@v4
+        name: ElytraMace-Mod
+        path: build/libs/*.jar
