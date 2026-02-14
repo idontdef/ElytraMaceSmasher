@@ -20,8 +20,15 @@ jobs:
     - name: Install Gradle
       uses: gradle/actions/setup-gradle@v4
 
-    - name: Generate Gradle Wrapper
-      run: gradle wrapper --gradle-version 8.8
+    - name: Generate Gradle Wrapper safely
+      run: |
+        mkdir temp
+        cd temp
+        gradle wrapper --gradle-version 8.8
+        cd ..
+        cp -r temp/gradle .
+        cp temp/gradlew .
+        cp temp/gradlew.bat .
 
     - name: Make gradlew executable
       run: chmod +x gradlew
