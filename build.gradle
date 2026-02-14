@@ -1,6 +1,5 @@
-//
 plugins {
-    id 'fabric-loom' version '1.6.9'
+    id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -12,20 +11,14 @@ base {
 }
 
 repositories {
-    // Loom automatically adds required repositories
+    mavenCentral()
+    maven { url = 'https://maven.fabricmc.net/' }
 }
 
 dependencies {
-    // Minecraft
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-
-    // Yarn mappings (IMPORTANT — fixes your error)
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
-    // Fabric Loader
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    // Fabric API
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
@@ -33,7 +26,6 @@ processResources {
     inputs.property "version", project.version
     inputs.property "minecraft_version", project.minecraft_version
     inputs.property "loader_version", project.loader_version
-    filteringCharset "UTF-8"
 
     filesMatching("fabric.mod.json") {
         expand(
@@ -47,7 +39,6 @@ processResources {
 def targetJavaVersion = 21
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
     it.options.release.set(targetJavaVersion)
 }
 
